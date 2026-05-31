@@ -1,0 +1,43 @@
+-- IMDb SQLite table creation worksheet
+-- Database file: final.db
+--
+-- Open Beekeeper Studio, connect to final.db as a SQLite database,
+-- then use this file as your guide.
+--
+-- Your job:
+-- 1. Drop the child table first, then the parent table.
+-- 2. Create the parent table: titles.
+-- 3. Create the child table: ratings.
+-- 4. Add primary keys.
+-- 5. Add the foreign key from ratings.tconst to titles.tconst.
+--
+-- Table 1: titles
+-- Source CSV: imdb_datasets/title.basics.csv
+-- One row: one IMDb title
+--
+-- Columns to include:
+-- tconst          TEXT      primary key
+-- titleType       TEXT
+-- primaryTitle    TEXT
+-- originalTitle   TEXT
+-- isAdult         INTEGER
+-- startYear       INTEGER
+-- endYear         INTEGER
+-- runtimeMinutes  INTEGER
+-- genres          TEXT
+--
+-- Write your DROP TABLE and CREATE TABLE statement for titles below.
+
+
+
+-- Table 2: ratings
+-- Source CSV: imdb_datasets/title.ratings.csv
+-- One row: one rating summary for a title
+--
+-- Columns to include:
+-- tconst          TEXT      primary key and foreign key to titles.tconst
+-- averageRating   REAL
+-- numVotes        INTEGER
+--
+-- Write your DROP TABLE and CREATE TABLE statement for ratings below.
+

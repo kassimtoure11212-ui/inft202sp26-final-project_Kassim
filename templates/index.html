@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}IMDb Dashboard{% endblock %}
+
+{% block content %}
+  <h1>IMDb Dashboard</h1>
+  <p>Explore title records, rating summaries, and patterns across title types from the IMDb dataset.</p>
+
+  <section class="grid">
+    <div class="card">
+      <div class="stat-label">Titles</div>
+      <div class="stat-value">{{ "{:,}".format(stats.titles) }}</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Rated Titles</div>
+      <div class="stat-value">{{ "{:,}".format(stats.ratings) }}</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Average Rating</div>
+      <div class="stat-value">{{ stats.avg_rating }}</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Movies</div>
+      <div class="stat-value">{{ "{:,}".format(stats.movie_count) }}</div>
+    </div>
+  </section>
+
+  <section class="charts">
+    <div class="card">
+      <h2>Titles By Type</h2>
+      <div class="chart-box"><canvas id="typeChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Average Rating By Type</h2>
+      <div class="chart-box"><canvas id="ratingChart"></canvas></div>
+    </div>
+  </section>
+
+  <script>
+    const typeData = {{ title_type_counts | tojson }};
+    const ratingData = {{ average_ratings | tojson }};
+
+    new Chart(document.getElementById("typeChart"), {
+      type: "bar",
+      data: {
+        labels: typeData.map(row => row.label),
+        datasets: [{
+          label: "Titles",
+          data: typeData.map(row => row.value),
+          backgroundColor: "#005DAA"
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    new Chart(document.getElementById("ratingChart"), {
+      type: "bar",
+      data: {
+        labels: ratingData.map(row => row.label),
+        datasets: [{
+          label: "Average rating",
+          data: ratingData.map(row => row.value),
+          backgroundColor: "#F26822"
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { suggestedMin: 0, suggestedMax: 10 } }
+      }
+    });
+  </script>
+{% endblock %}

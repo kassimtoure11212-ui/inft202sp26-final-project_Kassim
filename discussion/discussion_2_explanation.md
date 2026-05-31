@@ -1,0 +1,1 @@
+The query shows that Comedy has the most highly rated titles, with 1,438 titles rated 8.0 or higher. Drama and Documentary also appear many times in the results. This tells me that many of the highest-rated titles in this IMDb dataset are comedies, dramas, or documentaries.

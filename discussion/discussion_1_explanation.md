@@ -1,0 +1,1 @@
+The results show that movies have the longest average runtime, at about 89 minutes. TV specials, TV mini-series, and video games also have longer average runtimes, while shorts and TV shorts are much shorter. This makes sense because movies and specials are usually made as longer productions, while shorts are meant to be quick to watch.

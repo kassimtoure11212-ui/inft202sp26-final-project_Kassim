@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Insights{% endblock %}
+
+{% block content %}
+  <h1>Insights</h1>
+
+  {% for card in cards %}
+    <section class="card" style="margin-bottom: 18px;">
+      <h2>{{ card.question }}</h2>
+      <div class="callout">{{ card.explanation }}</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              {% for key in card.rows[0].keys() %}
+                <th>{{ key }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in card.rows %}
+              <tr>
+                {% for value in row.values() %}
+                  <td>{{ value }}</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endfor %}
+{% endblock %}

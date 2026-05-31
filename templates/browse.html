@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Titles{% endblock %}
+
+{% block content %}
+  <h1>Browse Titles</h1>
+  <p>{{ "{:,}".format(total) }} titles found.</p>
+
+  <form class="search-row" method="get">
+    <input type="search" name="q" value="{{ q }}" placeholder="Search title names">
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Primary Title</th>
+          <th>Original Title</th>
+          <th>Year</th>
+          <th>Runtime</th>
+          <th>Genres</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.tconst }}</td>
+            <td>{{ row.titleType }}</td>
+            <td>{{ row.primaryTitle }}</td>
+            <td>{{ row.originalTitle }}</td>
+            <td>{{ row.startYear or "" }}</td>
+            <td>{{ row.runtimeMinutes or "" }}</td>
+            <td>{{ row.genres or "" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pager">
+    <div>Page {{ page }} of {{ pages }}</div>
+    <div>
+      {% if page > 1 %}
+        <a class="button secondary" href="/browse?page={{ page - 1 }}&q={{ q }}">Previous</a>
+      {% endif %}
+      {% if page < pages %}
+        <a class="button" href="/browse?page={{ page + 1 }}&q={{ q }}">Next</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

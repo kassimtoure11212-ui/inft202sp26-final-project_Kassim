@@ -7,3 +7,4 @@ __pycache__/
 .DS_Store
 setup_check.md
 database_setup.md
+server*.log

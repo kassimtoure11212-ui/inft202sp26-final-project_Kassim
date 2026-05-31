@@ -1,84 +1,140 @@
-# INFT202 - Database Final Project
+# IMDb SQLite Database Project
 
-This project uses Codex and Docker to guide you through a database final project in small steps: choosing data, exploring it, designing linked tables, writing SQL, and building a small Flask dashboard.
+## Project Overview
 
-## Start Here
+This project explores an IMDb dataset downloaded from Kaggle. The dataset includes title information and rating information for movies, TV episodes, shorts, videos, TV series, and other IMDb title types.
 
-1. Fork this repo on GitHub.
-2. Clone your fork:
+I used SQLite for the database because Docker was not working on this computer. The final database file is `final.db`, and the SQL queries were written and tested in Beekeeper Studio.
 
-```bash
-git clone https://github.com/YOUR_USERNAME/inft202-final-project.git
-cd inft202-final-project
-```
+## Dataset
 
-3. Open Codex and choose this project folder as the workspace.
-4. In Codex, run the local agent skill by saying:
+Dataset name: IMDb Datasets
+
+Source: Kaggle
+
+Files used:
+- `imdb_datasets/title.basics.csv`
+- `imdb_datasets/title.ratings.csv`
+
+The full download also included other IMDb files, but this project focuses on two related tables so the schema and queries stay clear.
+
+## Data Exploration
+
+During exploration, I looked at the CSV headers, row counts, sample rows, possible ID columns, and missing values. Each selected CSV had 1,000,000 rows.
+
+The `title.basics.csv` file describes IMDb titles, including title type, title name, year, runtime, and genres. The `title.ratings.csv` file describes ratings for titles, including average rating and number of votes.
+
+## Schema
+
+The database has two tables:
+
+### `titles`
+
+One row represents one IMDb title.
+
+Important columns:
+- `tconst`: title ID and primary key
+- `titleType`: type of title, such as movie, tvEpisode, short, or tvSeries
+- `primaryTitle`: main title name
+- `originalTitle`: original title name
+- `isAdult`: adult-content flag
+- `startYear`: release or start year
+- `endYear`: end year for series
+- `runtimeMinutes`: runtime in minutes
+- `genres`: genre text
+
+### `ratings`
+
+One row represents one rating summary for a title.
+
+Important columns:
+- `tconst`: title ID, primary key, and foreign key to `titles.tconst`
+- `averageRating`: IMDb average rating
+- `numVotes`: number of votes
+
+Relationship:
 
 ```text
-Load the db-final-project skill and start the final project guide.
+titles.tconst = ratings.tconst
 ```
 
-Codex will detect which phase you are in and tell you the next step.
+## Guided Queries
 
-Codex's first job is to run `scripts/setup_check.py`. That script checks your GitHub setup, starts the Docker database bundle, and verifies a PostgreSQL database named `final`.
+The six guided SQL queries are saved in the `queries/` folder.
 
-## What You Need Installed
+1. `query_1.sql`: Finds the 10 highly rated titles with the most votes.
+2. `query_2.sql`: Counts how many titles there are for each title type.
+3. `query_3.sql`: Calculates the average rating for each title type.
+4. `query_4.sql`: Shows average rating by title type only for groups with more than 1,000 rated titles.
+5. `query_5.sql`: Joins titles and ratings to show title name, title type, rating, and votes for the most-voted titles.
+6. `query_6.sql`: Calculates average votes and rated-title counts for each title type.
 
-- Git
-- Docker Desktop
-- Codex
-- A GitHub account
+## Discussion Queries
 
-You do not need to install PostgreSQL, Python, pip, or Flask directly on your computer. Docker runs the database and app environment for this project.
+The two discussion queries are saved in the `discussion/` folder.
 
-## What You Will Create
+### Discussion Query 1
 
-- `data_exploration.md` - notes from exploring your dataset
-- `schema_plan.md` - your table design and table relationships
-- `table_creation.sql` - your own `CREATE TABLE` commands
-- `import.sql` - helper commands for loading data
-- `queries/query_1.sql` through `queries/query_6.sql` - guided SQL queries
-- `discussion/discussion_1.sql` and `discussion/discussion_2.sql` - your own analysis queries
-- A Flask dashboard generated after your SQL work is complete
+Question: Which title types have the longest average runtime?
 
-## Database Workflow
+Explanation:
 
-The Docker setup starts:
+The results show that movies have the longest average runtime, at about 89 minutes. TV specials, TV mini-series, and video games also have longer average runtimes, while shorts and TV shorts are much shorter. This makes sense because movies and specials are usually made as longer productions, while shorts are meant to be quick to watch.
 
-- PostgreSQL at `localhost:5432`
-- Adminer, a browser database tool, at `http://localhost:8080`
+### Discussion Query 2
 
-To use **Adminer**, open `http://localhost:8080` and enter:
+Question: Which genres appear most often among highly rated titles?
 
-- System/server: `PostgreSQL`
-- Server: `postgres`
-- Username: `postgres`
-- Password: `postgres`
-- Database: `final`
+Explanation:
 
-To use **Beekeeper Studio**, create a new Postgres connection and enter:
+The query shows that Comedy has the most highly rated titles, with 1,438 titles rated 8.0 or higher. Drama and Documentary also appear many times in the results. This tells me that many of the highest-rated titles in this IMDb dataset are comedies, dramas, or documentaries.
 
-- Host: `localhost`
-- Port: `5432`
-- User: `postgres`
-- Password: `postgres`
-- Default database: `final`
+## Web Dashboard
 
-Write and run SQL in Adminer or Beekeeper Studio, then paste your query and a few result rows back into Codex. Codex will help you debug and will save your finished query files.
+The Flask web app has three pages:
 
-Codex can guide you, but it should not write your final `CREATE TABLE` commands or graded query SQL for you.
+- Dashboard: summary stats and charts
+- Browse: searchable title browser
+- Insights: discussion query results and explanations
 
-## Submit
+Main files:
+- `app.py`
+- `run_app.py`
+- `templates/base.html`
+- `templates/index.html`
+- `templates/browse.html`
+- `templates/insights.html`
 
-When finished, push your work to GitHub and submit the repo link on Canvas:
+## How To Run The App
 
-```bash
-git add .
-git commit -m "Final project complete"
-git push
+Open PowerShell in this project folder:
+
+```powershell
+cd C:\Users\Guttman\Documents\GitHub\inft202sp26-final-project_Kassim
 ```
 
-Your `.env` file should stay out of GitHub because it may contain your database password.
+Run the app:
 
-See [RUBRIC.md](RUBRIC.md) for grading details.
+```powershell
+& 'C:\Users\Guttman\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' run_app.py
+```
+
+Open this URL in a browser:
+
+```text
+http://127.0.0.1:5000
+```
+
+## SQLite Setup
+
+The project uses:
+
+- Database type: SQLite
+- Database file: `final.db`
+- SQL tool: Beekeeper Studio
+
+The `final.db` file is not included in GitHub because `.gitignore` excludes `*.db`.
+
+## What I Built
+
+In this project, I designed a relational database schema, imported real IMDb data, wrote SQL queries using filtering, sorting, grouping, aggregate functions, `HAVING`, and joins, and built a Flask dashboard connected to a SQLite database.
